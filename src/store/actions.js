@@ -17,6 +17,21 @@ function getDevices ({ state, commit }, server) {
     .catch((err) => { commit('reqFailed', err) }) : false
 }
 
+async function checkConnection ({ state, commit }) {
+  try {
+    let resp = await Vue.http.get(`/statics/icons/favicon-16x16.png?_=${(new Date()).getTime()}`)
+    if (resp.status === 200) {
+      commit('setOfflineFlag', false)
+    }
+  }
+  catch (e) {
+    if (DEV) {
+      console.log(e)
+    }
+  }
+}
+
 export default {
-  getDevices
+  getDevices,
+  checkConnection
 }

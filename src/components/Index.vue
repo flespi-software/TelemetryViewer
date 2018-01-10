@@ -1,15 +1,15 @@
 <template>
   <q-layout ref="layout" view="hHh LpR lFf" :left-class="{'bg-dark':true}" :left-style="{padding: '20px 16px 0'}" :left-breakpoint="576" :page-class="{'bg-dark': invertedTelemetry}" :page-style="{transition: 'all .5s ease-in-out'}">
     <q-toolbar slot="header" color="dark">
-      <q-btn flat @click="$refs.layout.toggleLeft()">
+      <q-btn flat @click="$refs.layout.toggleLeft()" v-if="!offline">
         <q-icon name="menu" />
       </q-btn>
       <q-toolbar-title>
         Telemetry Viewer
       </q-toolbar-title>
-      <q-search :style="{maxWidth: searchWidth}" @focus="searchFocusHandler" @blur="searchBlurHandler" v-if="Object.keys(devices).length && token" type="text" v-model="search" inverted color="none" />
+      <q-search :style="{maxWidth: searchWidth}" @focus="searchFocusHandler" @blur="searchBlurHandler" v-if="Object.keys(devices).length && token && !offline" type="text" v-model="search" inverted color="none" />
     </q-toolbar>
-    <div slot="left">
+    <div slot="left" v-if="!offline">
       <q-input type="text" float-label="Token" v-model="tokenModel" inverted color="none" :after="[{icon: 'arrow_forward', handler: logIn}]" v-if="!token" />
       <q-btn style="width: 100%" v-if="token" @click="LogoutHandler" inverted color="none">Logout</q-btn>
       <q-collapsible group="left" :opened="!!token" class="text-white" v-if="Object.keys(devices).length && token" icon="developer_board" label="Parameters">
@@ -38,15 +38,16 @@
       :color="telemetryColor"
     >
     </q-telemetry>
-    <div v-if="!token" class="text-center text-uppercase text-grey-7" style="font-size: 3rem; padding-top: 30px">
-      Please, enter valid token!
+    <div v-if="!token && offline" class="text-center text-uppercase text-grey-7" style="font-size: 3rem; padding-top: 30px">
+      <span v-if="!token && !offline">Please, enter valid token!</span>
+      <span v-if="offline">Offline</span>
     </div>
   </q-layout>
 </template>
 
 <script>
 import Vue from 'vue'
-import { QLayout, QToolbar, QToolbarTitle, QSelect, QBtn, QIcon, QInput, QItem, QItemSide, QItemMain, QItemTile, QToggle, QCheckbox, QSearch, QCollapsible, Cookies, LocalStorage, Dialog } from 'quasar-framework'
+import { QLayout, Loading, QSpinnerGears, QToolbar, QToolbarTitle, QSelect, QBtn, QIcon, QInput, QItem, QItemSide, QItemMain, QItemTile, QToggle, QCheckbox, QSearch, QCollapsible, Cookies, LocalStorage, Dialog } from 'quasar-framework'
 import { QTelemetry, install as installTelemetryVuexModule } from 'qtelemetry'
 import { mapActions, mapMutations, mapState } from 'vuex'
 
@@ -59,6 +60,7 @@ export default {
     return {
       activeDeviceId: null,
       tokenModel: '',
+      offlineIntervalId: 0,
       server: 'https://flespi.io',
       delay: 3,
       propHistoryFlag: true,
@@ -90,7 +92,8 @@ export default {
     ...mapState({
       token: (state) => state.token,
       devices: (state) => state.devices,
-      hasDevicesInit: state => state.hasDevicesInit
+      hasDevicesInit: state => state.hasDevicesInit,
+      offline: state => state.offline
     }),
     selectDeviceOptions () {
       return Object.keys(this.devices).map(id => ({
@@ -107,13 +110,21 @@ export default {
           }
           else {
             // init after get devices
-            this.activeDeviceId = ids[0].toString()
-            return ids[0].toString()
+            let activeIdFroLocalStorage = LocalStorage.get.item('activeDeviceId')
+            if (activeIdFroLocalStorage) {
+              this.activeDeviceId = activeIdFroLocalStorage
+              return activeIdFroLocalStorage
+            }
+            else {
+              this.activeDeviceId = ids[0].toString()
+              return ids[0].toString()
+            }
           }
         }
         return '-1'
       },
       set (id) {
+        LocalStorage.set('activeDeviceId', id)
         this.activeDeviceId = id
       }
     },
@@ -129,7 +140,8 @@ export default {
       'unsetDevicesInit'
     ]),
     ...mapActions([
-      'getDevices'
+      'getDevices',
+      'checkConnection'
     ]),
     logIn () {
       this.$store.commit('setToken', this.tokenModel)
@@ -200,6 +212,26 @@ export default {
     $route (val) {
       if (val.params && val.params.token) {
         this.autoLogin()
+      }
+    },
+    offline (val) {
+      if (val) {
+        if (!this.offlineIntervalId) {
+          this.offlineIntervalId = setInterval(this.checkConnection, 5000)
+          Loading.show({
+            spinner: QSpinnerGears,
+            message: 'Waiting for reconnection',
+            messageColor: 'white',
+            spinnerSize: 250,
+            spinnerColor: 'white'
+          })
+        }
+      }
+      else {
+        clearInterval(this.offlineIntervalId)
+        this.offlineIntervalId = 0
+        this.checkHasToken()
+        Loading.hide()
       }
     }
   },

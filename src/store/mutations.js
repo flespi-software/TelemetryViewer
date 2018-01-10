@@ -17,6 +17,11 @@ function reqFailed (state, payload) {
     console.log(payload)
   }
   switch (payload.status) {
+    case 0: {
+      setOfflineFlag(state, true)
+      Vue.set(state, 'token', '')
+      break
+    }
     case 401: {
       clearToken(state)
       break
@@ -57,6 +62,9 @@ function unsetDevicesInit (state) {
   state.hasDevicesInit = false
   Vue.set(state, 'devices', [])
 }
+function setOfflineFlag (state, flag) {
+  Vue.set(state, 'offline', flag)
+}
 
 export default {
   reqStart,
@@ -65,5 +73,6 @@ export default {
   setToken,
   clearToken,
   setDevicesInit,
-  unsetDevicesInit
+  unsetDevicesInit,
+  setOfflineFlag
 }
