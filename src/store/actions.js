@@ -1,25 +1,23 @@
 import Vue from 'vue'
 
-function getDevices ({ state, commit }, server) {
+async function getDevices ({ state, commit }, server) {
   commit('reqStart')
-  return state.token ? Vue.http.get(`${server}/registry/devices/all`, {
-    params: {
-      fields: 'id,name,ident,phone,telemetry,messages_ttl'
-    }
-  }).then((resp) => resp.json())
-    .then((json) => {
-      commit('reqSuccessful', json)
+  try {
+    if (state.token) {
+      let devicesResp = await Vue.connector.getDevices('all', { fields: 'id,name,ident,phone,telemetry,messages_ttl' })
+      let devices = devicesResp.data.result
+      commit('reqSuccessful', devices)
       if (!state.hasDevicesInit) {
         commit('setDevicesInit')
       }
-      return json.result
-    })
-    .catch((err) => { commit('reqFailed', err) }) : false
+    }
+  }
+  catch (error) { commit('reqFailed', error) }
 }
 
 async function checkConnection ({ state, commit }) {
   try {
-    let resp = await Vue.http.get(`./statics/icons/favicon-16x16.png?_=${(new Date()).getTime()}`)
+    let resp = await Vue.connector.http.get(`./statics/icons/favicon-16x16.png?_=${(new Date()).getTime()}`)
     if (resp.status === 200) {
       commit('setOfflineFlag', false)
     }

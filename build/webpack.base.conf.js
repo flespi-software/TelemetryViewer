@@ -95,6 +95,7 @@ module.exports = {
       'process.env': config[env.prod ? 'build' : 'dev'].env,
       'DEV': env.dev,
       'PROD': env.prod,
+      'IS_LOCAL_BUILD': env.isLocal,
       '__THEME': '"' + env.platform.theme + '"'
     }),
     new webpack.LoaderOptionsPlugin({

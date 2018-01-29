@@ -17,7 +17,6 @@
       </q-collapsible>
       <q-collapsible group="left" class="text-white" icon="settings" label="Settings">
         <q-input type="text" float-label="Server" v-model="server" inverted color="none" />
-        <q-input suffix="sec." float-label="Delay" type="text" v-model="delay" inverted color="none" />
         <q-checkbox v-model="propHistoryFlag" checked-icon="history" unchecked-icon="history" label="History" :color="propHistoryFlag ? 'white' : 'grey'" class="text-grey uppercase" style="padding: 15px 0 0"/>
         <div class="row">
           <div class="col-6 uppercase" style="padding: 26px 0 0;"><q-checkbox v-model="invertedTelemetry" checked-icon="filter_b_and_w" unchecked-icon="filter_b_and_w" label="Inverted" :color="invertedTelemetry ? 'white' : 'grey'" class="text-grey"/></div>
@@ -29,7 +28,7 @@
       v-if="Object.keys(devices).length && token"
       :device="activeDevice"
       :propHistoryFlag="propHistoryFlag"
-      :delay="delay * 1000"
+      :moduleName="moduleName"
       :search="search"
       :server="server"
       @click:item="clickItemHandler"
@@ -48,7 +47,7 @@
 <script>
 import Vue from 'vue'
 import { QLayout, Loading, QSpinnerGears, QToolbar, QToolbarTitle, QSelect, QBtn, QIcon, QInput, QItem, QItemSide, QItemMain, QItemTile, QToggle, QCheckbox, QSearch, QCollapsible, Cookies, LocalStorage, Dialog } from 'quasar-framework'
-import { QTelemetry, install as installTelemetryVuexModule } from 'qtelemetry'
+import { QTelemetry, module as telemetryVuexModule } from 'qtelemetry'
 import { mapActions, mapMutations, mapState } from 'vuex'
 
 export default {
@@ -68,6 +67,7 @@ export default {
       invertedTelemetry: false,
       telemetryColor: '',
       searchWidth: '40px',
+      moduleName: 'telemetry_container',
       telemetryColorOptions: [
         {
           label: 'Default',
@@ -111,7 +111,7 @@ export default {
           else {
             // init after get devices
             let activeIdFroLocalStorage = LocalStorage.get.item('activeDeviceId')
-            if (activeIdFroLocalStorage) {
+            if (activeIdFroLocalStorage && Object.keys(this.devices).includes(activeIdFroLocalStorage)) {
               this.activeDeviceId = activeIdFroLocalStorage
               return activeIdFroLocalStorage
             }
@@ -236,7 +236,7 @@ export default {
     }
   },
   created () {
-    installTelemetryVuexModule(this.$store, Vue)
+    this.$store.registerModule(this.moduleName, telemetryVuexModule(this.$store, Vue))
     this.checkHasToken()
   }
 }

@@ -6,8 +6,8 @@ function reqStart (state) {
     console.log('Start Request')
   }
 }
-function reqSuccessful (state, { result }) {
-  result.forEach(device => {
+function reqSuccessful (state, devices) {
+  devices.forEach(device => {
     Vue.set(state.devices, device.id, device)
   })
 }
@@ -16,7 +16,7 @@ function reqFailed (state, payload) {
     console.log('Failed Request')
     console.log(payload)
   }
-  switch (payload.status) {
+  switch (payload.response.status) {
     case 0: {
       setOfflineFlag(state, true)
       Vue.set(state, 'token', '')
@@ -36,11 +36,12 @@ function reqFailed (state, payload) {
 function setToken (state, val) {
   let token = val.replace('FlespiToken ', '')
   if (val && token.match(/^[a-z0-9]+$/i)) {
-    Vue.http.headers.common['Authorization'] = `FlespiToken ${token}`
+    Vue.connector.token = `FlespiToken ${token}`
     LocalStorage.set('X-Flespi-Token', token)
   }
   else {
     token = ''
+    Vue.connector.token = ''
     clearToken(state)
   }
   Vue.set(state, 'token', token)
@@ -52,7 +53,7 @@ function clearToken (state) {
     Cookies.remove('X-Flespi-Token')
   }
   LocalStorage.remove('X-Flespi-Token')
-  Vue.http.headers.common['Authorization'] = ''
+  Vue.connector.token = ''
   Vue.set(state, 'token', '')
 }
 function setDevicesInit (state) {

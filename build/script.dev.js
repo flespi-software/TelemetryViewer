@@ -16,6 +16,7 @@ var
   uri = 'http://localhost:' + port
 
 console.log(' Starting dev server with "' + (process.argv[2] || env.platform.theme).bold + '" theme...')
+if (env.isLocal) { console.log(' Configure for local development') }
 console.log(' Will listen at ' + uri.bold)
 if (config.dev.openBrowser) {
   console.log(' Browser will open when build is ready.\n')

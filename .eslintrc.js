@@ -20,6 +20,7 @@ module.exports = {
     'cordova': true,
     'DEV': true,
     'PROD': true,
+    'IS_LOCAL_BUILD': true,
     '__THEME': true
   },
   // add your custom rules here

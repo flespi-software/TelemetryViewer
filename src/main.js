@@ -14,10 +14,17 @@ import Vue from 'vue'
 import Quasar from 'quasar'
 import router from './router'
 import store from './store'
-
+import ConnectionPlugin from 'flespi-io-js/dist/vue-plugin'
+let connectionConfig = {}
+if (IS_LOCAL_BUILD) {
+  connectionConfig = {
+    httpConfig: { server: 'https://localhost', port: 9005 },
+    mqttConfig: { server: `ws://localhost:9016` }
+  }
+}
+Vue.use(ConnectionPlugin, connectionConfig)
 Vue.config.productionTip = false
 Vue.use(Quasar) // Install Quasar Framework
-
 if (__THEME === 'mat') {
   require('quasar-extras/roboto-font')
 }
