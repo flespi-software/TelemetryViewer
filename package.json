@@ -1,7 +1,7 @@
 {
   "name": "telemetry-viewer",
   "productName": "Telemetry Viewer",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "author": "SeBu",
   "description": "A simple application based on flespi.io and built with Quasar. That displays devices telemetry.",
   "license": "MIT",
