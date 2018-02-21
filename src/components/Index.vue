@@ -45,9 +45,8 @@
 </template>
 
 <script>
-import Vue from 'vue'
 import { QLayout, Loading, QSpinnerGears, QToolbar, QToolbarTitle, QSelect, QBtn, QIcon, QInput, QItem, QItemSide, QItemMain, QItemTile, QToggle, QCheckbox, QSearch, QCollapsible, Cookies, LocalStorage, Dialog } from 'quasar-framework'
-import { QTelemetry, module as telemetryVuexModule } from 'qtelemetry'
+import QTelemetry from 'qtelemetry'
 import { mapActions, mapMutations, mapState } from 'vuex'
 
 export default {
@@ -236,7 +235,6 @@ export default {
     }
   },
   created () {
-    this.$store.registerModule(this.moduleName, telemetryVuexModule(this.$store, Vue))
     this.checkHasToken()
   }
 }
