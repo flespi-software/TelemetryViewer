@@ -1,5 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
+### [0.0.6] - 2018-03-01
+[feature] 403 codes removed
 ### [0.0.5] - 2018-02-27
 [feature] 403 codes added
 ### [0.0.4] - 2018-02-21
