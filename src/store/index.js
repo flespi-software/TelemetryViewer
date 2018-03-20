@@ -5,7 +5,7 @@ import actions from './actions.js'
 
 Vue.use(Vuex)
 
-let state = {
+const state = {
   token: '',
   devices: {},
   hasDevicesInit: false,

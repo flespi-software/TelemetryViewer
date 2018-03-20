@@ -32,13 +32,10 @@ $ cd telemetryviewer
 $ npm install
 
 # serve with hot reload at localhost:7006
-$ quasar dev
+$ npm run dev
 
 # build for production with minification
-$ quasar build
-
-# lint code
-$ quasar lint
+$ npm run build
 ```
 ## Demo
 Check it out [live](https://flespi-software.github.io/TelemetryViewer)!

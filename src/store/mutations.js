@@ -1,5 +1,5 @@
 import Vue from 'vue'
-import { Cookies, LocalStorage } from 'quasar-framework'
+import { Cookies, LocalStorage } from 'quasar'
 
 function reqStart (state) {
   if (DEV) {
@@ -16,6 +16,7 @@ function reqFailed (state, payload) {
     console.log('Failed Request')
     console.log(payload)
   }
+  console.log(payload)
   switch (payload.response.status) {
     case 0: {
       setOfflineFlag(state, true)
@@ -38,8 +39,7 @@ function setToken (state, val) {
   if (val && token.match(/^[a-z0-9]+$/i)) {
     Vue.connector.token = `FlespiToken ${token}`
     LocalStorage.set('X-Flespi-Token', token)
-  }
-  else {
+  } else {
     token = ''
     Vue.connector.token = ''
     clearToken(state)
@@ -47,7 +47,7 @@ function setToken (state, val) {
   Vue.set(state, 'token', token)
 }
 function clearToken (state) {
-  let cookieToken = Cookies.get('X-Flespi-Token'),
+  const cookieToken = Cookies.get('X-Flespi-Token'),
     localStorageToken = LocalStorage.get.item('X-Flespi-Token')
   if (cookieToken && localStorageToken && cookieToken === localStorageToken) {
     Cookies.remove('X-Flespi-Token')

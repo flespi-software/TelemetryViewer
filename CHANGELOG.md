@@ -1,5 +1,8 @@
 # Changelog
 All notable changes to this project will be documented in this file.
+### [0.0.8] - 2018-03-20
+[feature] migrate to new quasar
+[update] packages
 ### [0.0.7] - 2018-03-12
 [feature] removed registry
 ### [0.0.6] - 2018-03-01
