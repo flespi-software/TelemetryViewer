@@ -1,6 +1,6 @@
 {
   "name": "telemetry-viewer",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "A simple application based on flespi.io and built with Quasar. That displays devices telemetry.",
   "productName": "TelemetryViewer",
   "cordovaId": "org.cordova.quasar.app",
