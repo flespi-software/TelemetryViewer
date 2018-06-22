@@ -4,7 +4,7 @@ async function getDevices ({ state, commit }, server) {
   commit('reqStart')
   try {
     if (state.token) {
-      const devicesResp = await Vue.connector.gw.getDevices('all', { fields: 'id,name,ident,phone,telemetry,messages_ttl' })
+      const devicesResp = await Vue.connector.gw.getDevices('all', { fields: 'id,name,ident,phone,messages_ttl' })
       const devices = devicesResp.data.result
       commit('reqSuccessful', devices)
       if (!state.hasDevicesInit) {

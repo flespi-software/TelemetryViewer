@@ -1,5 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
+### [0.0.9] - 2018-06-22
+[feature] rebase telemetry
 ### [0.0.9] - 2018-03-22
 [fix] dialog login
 ### [0.0.8] - 2018-03-20

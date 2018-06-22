@@ -1,6 +1,6 @@
 {
   "name": "telemetry-viewer",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "A simple application based on flespi.io and built with Quasar. That displays devices telemetry.",
   "productName": "TelemetryViewer",
   "cordovaId": "org.cordova.quasar.app",
@@ -16,8 +16,8 @@
   "dependencies": {
     "flespi-io-js": "git+https://github.com/flespi-software/flespi-io-js.git",
     "qtelemetry": "git+https://github.com/flespi-software/QTelemetry.git",
-    "shelljs": "^0.8.1",
-    "vue-i18n": "^7.5.0"
+    "shelljs": "^0.8.2",
+    "vue-i18n": "^7.8.1"
   },
   "devDependencies": {
     "babel-eslint": "8.2.1",
@@ -31,7 +31,7 @@
     "eslint-plugin-standard": "3.0.1",
     "eslint-plugin-vue": "4.0.0",
     "git-directory-deploy": "^1.5.1",
-    "quasar-cli": "^0.15.12"
+    "quasar-cli": "^0.15.20"
   },
   "engines": {
     "node": ">= 8.9.0",
