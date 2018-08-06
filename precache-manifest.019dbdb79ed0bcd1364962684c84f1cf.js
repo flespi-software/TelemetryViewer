@@ -4,7 +4,7 @@ self.__precacheManifest = [
     "url": "fonts/flUhRq6tzZclQEJ-Vdg-IuiaDsNa.0384166.woff"
   },
   {
-    "revision": "ac29ec394501c6d8e6379435e12fb824",
+    "revision": "2b49c2b99a6d764d4ecb38b9a7d6a3ec",
     "url": "index.html"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = [
     "url": "statics/icons/icon-512x512.png"
   },
   {
-    "revision": "fb6178622690a8bec2f8",
-    "url": "js/app.892a1e0.js"
+    "revision": "11c1da1cc2258d11884a",
+    "url": "js/app.94a8a56.js"
   },
   {
     "revision": "37d4a4dc2a7265c13431",
@@ -28,12 +28,16 @@ self.__precacheManifest = [
     "url": "statics/icons/icon-384x384.png"
   },
   {
-    "revision": "2941cacdf1e521b8a380a5e6709328e7",
-    "url": "statics/icons/icon-256x256.png"
-  },
-  {
     "revision": "4b06f3608af9da8521edbf2e237596e7",
     "url": "statics/icons/ms-icon-144x144.png"
+  },
+  {
+    "revision": "f63bdbf1d5728bf711644b93ef4c4fe8",
+    "url": "statics/icons/icon-128x128.png"
+  },
+  {
+    "revision": "2941cacdf1e521b8a380a5e6709328e7",
+    "url": "statics/icons/icon-256x256.png"
   },
   {
     "revision": "f42103dc29c2df7133e639e1caedbc37",
@@ -44,16 +48,12 @@ self.__precacheManifest = [
     "url": "statics/icons/apple-icon-152x152.png"
   },
   {
-    "revision": "f63bdbf1d5728bf711644b93ef4c4fe8",
-    "url": "statics/icons/icon-128x128.png"
-  },
-  {
     "revision": "1429e4c47a98004cf4290ef7ca7fa500",
     "url": "statics/icons/favicon-16x16.png"
   },
   {
-    "revision": "662f8bc0008170c538fa",
-    "url": "js/0.662f8bc.js"
+    "revision": "97cc14926d0cd3cd810a",
+    "url": "js/0.97cc149.js"
   },
   {
     "revision": "791c846cb92da61bcc6bf46dbd4117a4",
@@ -96,11 +96,11 @@ self.__precacheManifest = [
     "url": "fonts/KFOkCnqEu92Fr1MmgVxIIzQ.e9dbbe8.woff"
   },
   {
-    "revision": "fb6178622690a8bec2f8",
+    "revision": "11c1da1cc2258d11884a",
     "url": "css/app.f1f969e9.css"
   },
   {
-    "revision": "662f8bc0008170c538fa",
+    "revision": "97cc14926d0cd3cd810a",
     "url": "css/0.0d0ebfb4.css"
   }
 ];
