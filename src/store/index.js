@@ -9,7 +9,10 @@ const state = {
   token: '',
   devices: {},
   hasDevicesInit: false,
-  offline: false
+  offline: false,
+  newNotificationCounter: 0,
+  errors: [],
+  socketOffline: false
 }
 
 export default new Vuex.Store(

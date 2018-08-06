@@ -9,10 +9,25 @@
           Telemetry Viewer
         </q-toolbar-title>
         <q-search :style="{maxWidth: searchWidth}" @focus="searchFocusHandler" @blur="searchBlurHandler" v-if="Object.keys(devices).length && token && !offline" type="text" v-model="search" inverted color="none" />
+        <q-btn v-if="errors.length && token" @click="clearNotificationCounter" small flat round size="md" icon="notifications" class="floated notifications">
+          <q-chip v-if="newNotificationCounter" floating color="red">{{newNotificationCounter}}</q-chip>
+          <q-popover fit ref="popoverError">
+            <q-list no-border style="max-height: 200px" link separator class="scroll">
+              <q-item
+                v-for="(error, index) in errors"
+                :key="index"
+                style="cursor: default"
+              >
+                <q-item-main>
+                  <q-item-tile label>{{error}}</q-item-tile>
+                </q-item-main>
+              </q-item>
+            </q-list>
+          </q-popover>
+        </q-btn>
       </q-toolbar>
     </q-layout-header>
     <q-layout-drawer side="left" v-model="layout.left" :content-class="{'bg-dark':true}" :content-style="{padding: '20px 16px 0'}" :breakpoint="576">
-      <q-input type="text" float-label="Token" v-model="tokenModel" inverted color="none" :after="[{icon: 'arrow_forward', handler: logIn}]" v-if="!token" />
       <q-btn style="width: 100%" v-if="token" @click="LogoutHandler" inverted color="none">Logout</q-btn>
       <q-collapsible group="left" :opened="!!token" class="text-white" v-if="Object.keys(devices).length && token" icon="developer_board" label="Parameters">
         <q-select v-if="Object.keys(devices).length && token" inverted color="dark" :before="[{icon: 'devices'}]" v-model="selectModel" :options="selectDeviceOptions"></q-select>
@@ -28,7 +43,7 @@
     </q-layout-drawer>
     <q-page-container :content-class="{'bg-dark': invertedTelemetry}" :content-style="{transition: 'all .5s ease-in-out'}">
       <q-telemetry
-        v-if="Object.keys(devices).length && token"
+        v-if="Object.keys(devices).length && token && !socketOffline"
         :device="activeDevice"
         :propHistoryFlag="propHistoryFlag"
         :moduleName="moduleName"
@@ -40,9 +55,13 @@
         :color="telemetryColor"
       >
       </q-telemetry>
-      <div v-if="!token && offline" class="text-center text-uppercase text-grey-7" style="font-size: 3rem; padding-top: 30px">
-        <span v-if="!token && !offline">Please, enter valid token!</span>
-        <span v-if="offline">Offline</span>
+      <div v-else class="text-center text-uppercase text-grey-7" style="font-size: 3rem; padding-top: 30px">
+        <div>Please, log in!</div>
+        <iframe v-if="!token"  style="width: 100%; height: 160px" :src="`${$flespiServer}/frame/index.html#fff;424242;70`" frameborder="0"></iframe>
+      </div>
+      <div v-if="!token && (offline || socketOffline)" class="text-center text-uppercase text-grey-7" style="font-size: 3rem; padding-top: 30px">
+        <span v-if="!token && (!offline && !socketOffline)">Please, log in!</span>
+        <span v-if="offline || socketOffline">Offline</span>
       </div>
     </q-page-container>
   </q-layout>
@@ -51,6 +70,7 @@
 <script>
 import { QSpinnerGears } from 'quasar'
 import QTelemetry from 'qtelemetry'
+import Vue from 'vue'
 import { mapActions, mapMutations, mapState } from 'vuex'
 
 export default {
@@ -73,6 +93,7 @@ export default {
       invertedTelemetry: false,
       telemetryColor: '',
       searchWidth: '40px',
+      stopHandler: () => {},
       moduleName: 'telemetry_container',
       telemetryColorOptions: [
         {
@@ -103,7 +124,7 @@ export default {
         if (state.offline) {
           this.$q.loading.show({
             spinner: QSpinnerGears,
-            message: 'Waiting for reconnection',
+            message: 'Waiting for connection',
             messageColor: 'white',
             spinnerSize: 250,
             spinnerColor: 'white'
@@ -113,7 +134,10 @@ export default {
           this.$q.loading.hide()
         }
         return state.offline
-      }
+      },
+      errors: state => state.errors,
+      socketOffline: state => state.socketOffline,
+      newNotificationCounter: state => state.newNotificationCounter
     }),
     selectDeviceOptions () {
       return Object.keys(this.devices).map(id => ({
@@ -147,7 +171,11 @@ export default {
       'setToken',
       'clearToken',
       'setDevicesInit',
-      'unsetDevicesInit'
+      'unsetDevicesInit',
+      'reqFailed',
+      'addError',
+      'clearNotificationCounter',
+      'clearErrors'
     ]),
     ...mapActions([
       'getDevices',
@@ -180,8 +208,10 @@ export default {
       this.searchWidth = '40px'
     },
     LogoutHandler () {
+      this.stopHandler()
       this.clearToken()
       this.unsetDevicesInit()
+      this.getTokenListen()
     },
     autoLogin () {
       this.$store.commit('setToken', this.$route.params.token)
@@ -209,14 +239,30 @@ export default {
           this.logIn()
         })
           .catch(() => {})
+      } else { this.getTokenListen() }
+    },
+    getTokenListen () {
+      if (!this.token) {
+        let tokenHandler = (event) => {
+          if (typeof event.data === 'string' && ~event.data.indexOf('FlespiToken')) {
+            this.tokenModel = event.data
+            this.logIn()
+            window.removeEventListener('message', tokenHandler)
+          }
+        }
+        window.addEventListener('message', tokenHandler)
       }
     }
   },
   watch: {
-    token (token) {
-      if (token && !this.hasDevicesInit) {
+    token (token, prevToken) {
+      let connectHandler = () => {
         this.getDevices(this.server)
-        setInterval(() => { this.getDevices(this.server) }, 30000)
+          .then(stopHandler => { this.stopHandler = stopHandler })
+        Vue.connector.socket.off('connect', connectHandler)
+      }
+      if (token && !this.hasDevicesInit) {
+        Vue.connector.socket.on('connect', connectHandler)
       }
     },
     $route (val) {
@@ -228,6 +274,12 @@ export default {
   created () {
     this.checkHasToken()
     this.offlineIntervalId = setInterval(this.checkConnection, 5000)
+    Vue.connector.socket.on('offline', () => {
+      this.$store.commit('setSocketOffline', true)
+    })
+    Vue.connector.socket.on('connect', () => {
+      this.$store.commit('setSocketOffline', false)
+    })
   }
 }
 </script>

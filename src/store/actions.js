@@ -4,12 +4,11 @@ async function getDevices ({ state, commit }, server) {
   commit('reqStart')
   try {
     if (state.token) {
-      const devicesResp = await Vue.connector.gw.getDevices('all', { fields: 'id,name,ident,phone,messages_ttl' })
-      const devices = devicesResp.data.result
-      commit('reqSuccessful', devices)
+      let ids = await Vue.connector.poolDevices((resp) => { commit('reqSuccessful', resp.data.result) }, (type, device) => { commit('updateDevices', { type, device }) })
       if (!state.hasDevicesInit) {
         commit('setDevicesInit')
       }
+      return async () => { await Vue.connector.poolDevicesStop(ids) }
     }
   } catch (error) { commit('reqFailed', error) }
 }

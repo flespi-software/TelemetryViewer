@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
-### [0.0.9] - 2018-06-22
+### [0.1.0] - 2018-08-06
+[update] packages
+[feature] error handling
+[feature] login by iframe
+[feature] migrate to new version of quasar
+[feature] migrate to MQTT 5
+### [0.0.10] - 2018-06-22
 [feature] rebase telemetry
 ### [0.0.9] - 2018-03-22
 [fix] dialog login
