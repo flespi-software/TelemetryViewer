@@ -4,7 +4,7 @@ self.__precacheManifest = [
     "url": "fonts/flUhRq6tzZclQEJ-Vdg-IuiaDsNa.0384166.woff"
   },
   {
-    "revision": "2b49c2b99a6d764d4ecb38b9a7d6a3ec",
+    "revision": "a66eca7854af250ea464d4cae1b1529c",
     "url": "index.html"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = [
     "url": "statics/icons/icon-512x512.png"
   },
   {
-    "revision": "11c1da1cc2258d11884a",
-    "url": "js/app.94a8a56.js"
+    "revision": "beebd292aacced9d1155",
+    "url": "js/app.9ba79a5.js"
   },
   {
     "revision": "37d4a4dc2a7265c13431",
@@ -28,20 +28,20 @@ self.__precacheManifest = [
     "url": "statics/icons/icon-384x384.png"
   },
   {
-    "revision": "4b06f3608af9da8521edbf2e237596e7",
-    "url": "statics/icons/ms-icon-144x144.png"
-  },
-  {
-    "revision": "f63bdbf1d5728bf711644b93ef4c4fe8",
-    "url": "statics/icons/icon-128x128.png"
-  },
-  {
     "revision": "2941cacdf1e521b8a380a5e6709328e7",
     "url": "statics/icons/icon-256x256.png"
   },
   {
+    "revision": "4b06f3608af9da8521edbf2e237596e7",
+    "url": "statics/icons/ms-icon-144x144.png"
+  },
+  {
     "revision": "f42103dc29c2df7133e639e1caedbc37",
     "url": "statics/icons/icon-192x192.png"
+  },
+  {
+    "revision": "f63bdbf1d5728bf711644b93ef4c4fe8",
+    "url": "statics/icons/icon-128x128.png"
   },
   {
     "revision": "06438c17ff3a24508a2d15930ff094d7",
@@ -52,8 +52,8 @@ self.__precacheManifest = [
     "url": "statics/icons/favicon-16x16.png"
   },
   {
-    "revision": "97cc14926d0cd3cd810a",
-    "url": "js/0.97cc149.js"
+    "revision": "ff43ae06f1687f5a9c77",
+    "url": "js/0.ff43ae0.js"
   },
   {
     "revision": "791c846cb92da61bcc6bf46dbd4117a4",
@@ -96,11 +96,11 @@ self.__precacheManifest = [
     "url": "fonts/KFOkCnqEu92Fr1MmgVxIIzQ.e9dbbe8.woff"
   },
   {
-    "revision": "11c1da1cc2258d11884a",
+    "revision": "beebd292aacced9d1155",
     "url": "css/app.f1f969e9.css"
   },
   {
-    "revision": "97cc14926d0cd3cd810a",
+    "revision": "ff43ae06f1687f5a9c77",
     "url": "css/0.0d0ebfb4.css"
   }
 ];
