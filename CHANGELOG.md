@@ -1,5 +1,8 @@
 # Changelog
 All notable changes to this project will be documented in this file.
+### [0.1.1] - 2018-08-07
+[feature] rebased getting devices
+[fix] init logic
 ### [0.1.0] - 2018-08-06
 [update] packages
 [feature] error handling

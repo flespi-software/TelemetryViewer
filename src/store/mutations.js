@@ -6,10 +6,14 @@ function reqStart (state) {
     console.log('Start Request')
   }
 }
-function reqSuccessful (state, devices) {
-  devices.forEach(device => {
+function reqSuccessful (state, device) {
+  /* if device was been created or modified */
+  if (typeof device === 'object') {
+    device = JSON.parse(device.toString())
     Vue.set(state.devices, device.id, device)
-  })
+  } else {
+    Vue.delete(state.devices, device)
+  }
 }
 function reqFailed (state, payload) {
   if (DEV) {
@@ -58,14 +62,15 @@ function setToken (state, val) {
   setSocketOffline(state, true)
   if (val && token.match(/^[a-z0-9]+$/i)) {
     Vue.connector.token = `FlespiToken ${token}`
-    Vue.connector.socket.on('connect', () => { setSocketOffline(state, false) })
+    Vue.connector.socket.on('connect', () => {
+      Vue.set(state, 'token', token)
+    })
     LocalStorage.set('X-Flespi-Token', token)
   } else {
     token = ''
     Vue.connector.token = ''
     clearToken(state)
   }
-  Vue.set(state, 'token', token)
   if (state.errors.length) {
     state.errors = []
     state.newNotificationCounter = 0
@@ -112,34 +117,6 @@ function setSocketOffline (state, flag) {
   Vue.set(state, 'socketOffline', flag)
 }
 
-function updateDevices (state, payload) {
-  switch (payload.type) {
-    case 'created': {
-      state.devices[payload.device.id] = payload.device
-      break
-    }
-    case 'updated': {
-      Object.keys(state.devices).some((id) => {
-        if (id === payload.device.id) {
-          state.devices[id] = Object.assign(state.devices[id], payload.device)
-          return true
-        }
-        return false
-      })
-      break
-    }
-    case 'deleted': {
-      Object.keys(state.devices).some((id, index) => {
-        if (id === payload.device.id) {
-          delete state.devices[id]
-          return true
-        }
-        return false
-      })
-      break
-    }
-  }
-}
 function clearNotificationCounter (state) { state.newNotificationCounter = 0 }
 export default {
   reqStart,
@@ -153,6 +130,5 @@ export default {
   addError,
   clearErrors,
   setSocketOffline,
-  updateDevices,
   clearNotificationCounter
 }

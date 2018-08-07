@@ -4,7 +4,7 @@ async function getDevices ({ state, commit }, server) {
   commit('reqStart')
   try {
     if (state.token) {
-      let ids = await Vue.connector.poolDevices((resp) => { commit('reqSuccessful', resp.data.result) }, (type, device) => { commit('updateDevices', { type, device }) })
+      let ids = await Vue.connector.socket.subscribe({name: 'flespi/state/gw/devices/+', handler (device, topic, packet) { commit('reqSuccessful', device.length ? device : topic.split('/').reverse()[0]) }})
       if (!state.hasDevicesInit) {
         commit('setDevicesInit')
       }

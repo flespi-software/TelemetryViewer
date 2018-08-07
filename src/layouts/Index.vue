@@ -6,7 +6,7 @@
           <q-icon name="menu" />
         </q-btn>
         <q-toolbar-title>
-          Telemetry Viewer
+          Telemetry Viewer <sup>{{version}}</sup>
         </q-toolbar-title>
         <q-search :style="{maxWidth: searchWidth}" @focus="searchFocusHandler" @blur="searchBlurHandler" v-if="Object.keys(devices).length && token && !offline" type="text" v-model="search" inverted color="none" />
         <q-btn v-if="errors.length && token" @click="clearNotificationCounter" small flat round size="md" icon="notifications" class="floated notifications">
@@ -72,6 +72,7 @@ import { QSpinnerGears } from 'quasar'
 import QTelemetry from 'qtelemetry'
 import Vue from 'vue'
 import { mapActions, mapMutations, mapState } from 'vuex'
+import { version } from '../../package.json'
 
 export default {
   name: 'index',
@@ -80,6 +81,7 @@ export default {
   },
   data () {
     return {
+      version,
       layout: {
         left: true
       },
@@ -118,7 +120,7 @@ export default {
   computed: {
     ...mapState({
       token: (state) => state.token,
-      devices: (state) => state.devices,
+      devices: (state) => { if (state.hasDevicesInit) { return state.devices } return {} },
       hasDevicesInit: state => state.hasDevicesInit,
       offline (state) {
         if (state.offline) {
@@ -149,11 +151,10 @@ export default {
       get () {
         const ids = Object.keys(this.devices)
         if (ids.length) {
-          if (this.activeDeviceId) {
-            return this.activeDeviceId
-          } else {
+          if (!this.activeDeviceId || !ids.includes(this.activeDeviceId)) {
             this.init()
           }
+          return this.activeDeviceId
         }
         return '-1'
       },
@@ -208,7 +209,9 @@ export default {
       this.searchWidth = '40px'
     },
     LogoutHandler () {
-      this.stopHandler()
+      if (this.stopHandler) {
+        this.stopHandler()
+      }
       this.clearToken()
       this.unsetDevicesInit()
       this.getTokenListen()
@@ -256,13 +259,14 @@ export default {
   },
   watch: {
     token (token, prevToken) {
-      let connectHandler = () => {
+      // let connectHandler = () => {
+      //   this.getDevices(this.server)
+      //     .then(stopHandler => { this.stopHandler = stopHandler })
+      //   Vue.connector.socket.off('connect', connectHandler)
+      // }
+      if (token && !this.hasDevicesInit) {
         this.getDevices(this.server)
           .then(stopHandler => { this.stopHandler = stopHandler })
-        Vue.connector.socket.off('connect', connectHandler)
-      }
-      if (token && !this.hasDevicesInit) {
-        Vue.connector.socket.on('connect', connectHandler)
       }
     },
     $route (val) {
