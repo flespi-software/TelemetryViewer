@@ -90,6 +90,10 @@ module.exports = function (ctx) {
     animations: [
     ],
     pwa: {
+      workboxOptions: {
+        skipWaiting: true,
+        clientsClaim: true
+      },
       manifest: {
         name: 'TelemetryViewer',
         short_name: 'Telemetry-Viewer',

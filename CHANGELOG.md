@@ -1,5 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
+### [0.1.2] - 2018-10-18
+[fix] service worker update message
 ### [0.1.1] - 2018-08-07
 [feature] rebased getting devices
 [fix] init logic
