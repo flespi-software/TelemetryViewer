@@ -4,7 +4,7 @@ self.__precacheManifest = [
     "url": "fonts/flUhRq6tzZclQEJ-Vdg-IuiaDsNa.0384166.woff"
   },
   {
-    "revision": "6f10e84bd63ee79dcc9488f2aeb94764",
+    "revision": "f93d9264527f53bed885bc5942898ccc",
     "url": "index.html"
   },
   {
@@ -12,8 +12,8 @@ self.__precacheManifest = [
     "url": "statics/icons/icon-512x512.png"
   },
   {
-    "revision": "095d9b197ba730abaef5",
-    "url": "js/app.5478f31.js"
+    "revision": "ec50c5f029fa9f523c80",
+    "url": "js/app.4cdca8d.js"
   },
   {
     "revision": "37d4a4dc2a7265c13431",
@@ -28,20 +28,20 @@ self.__precacheManifest = [
     "url": "statics/icons/icon-384x384.png"
   },
   {
-    "revision": "2941cacdf1e521b8a380a5e6709328e7",
-    "url": "statics/icons/icon-256x256.png"
-  },
-  {
     "revision": "4b06f3608af9da8521edbf2e237596e7",
     "url": "statics/icons/ms-icon-144x144.png"
   },
   {
-    "revision": "f42103dc29c2df7133e639e1caedbc37",
-    "url": "statics/icons/icon-192x192.png"
+    "revision": "2941cacdf1e521b8a380a5e6709328e7",
+    "url": "statics/icons/icon-256x256.png"
   },
   {
     "revision": "f63bdbf1d5728bf711644b93ef4c4fe8",
     "url": "statics/icons/icon-128x128.png"
+  },
+  {
+    "revision": "f42103dc29c2df7133e639e1caedbc37",
+    "url": "statics/icons/icon-192x192.png"
   },
   {
     "revision": "06438c17ff3a24508a2d15930ff094d7",
@@ -96,7 +96,7 @@ self.__precacheManifest = [
     "url": "fonts/KFOkCnqEu92Fr1MmgVxIIzQ.e9dbbe8.woff"
   },
   {
-    "revision": "095d9b197ba730abaef5",
+    "revision": "ec50c5f029fa9f523c80",
     "url": "css/app.f1f969e9.css"
   },
   {
