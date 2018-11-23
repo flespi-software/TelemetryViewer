@@ -56,8 +56,7 @@
       >
       </q-telemetry>
       <div v-else class="text-center text-uppercase text-grey-7" style="font-size: 3rem; padding-top: 30px">
-        <div>Please, log in!</div>
-        <iframe v-if="!token"  style="width: 100%; height: 160px" :src="`${$flespiServer}/frame/index.html#fff;424242;70`" frameborder="0"></iframe>
+        <q-btn @click="openWindow(`${$flespiServer}/login/#/providers`)" icon="mdi-account-circle" color="red-7" rounded label="login / register" size="lg"/>
       </div>
       <div v-if="!token && (offline || socketOffline)" class="text-center text-uppercase text-grey-7" style="font-size: 3rem; padding-top: 30px">
         <span v-if="!token && (!offline && !socketOffline)">Please, log in!</span>
@@ -223,25 +222,13 @@ export default {
       }, 1000)
     },
     checkHasToken () {
-      const authCookie = this.$q.cookies.get('X-Flespi-Token'),
-        localStorageToken = this.$q.localStorage.get.item('X-Flespi-Token')
+      const sessionStorageToken = this.$q.sessionStorage.get.item('currentToken')
       if (this.$route.params && this.$route.params.token) {
         this.tokenModel = this.$route.params.token
         this.autoLogin()
-      } else if (localStorageToken) {
-        this.tokenModel = localStorageToken
+      } else if (sessionStorageToken) {
+        this.tokenModel = sessionStorageToken
         this.logIn()
-      } else if (authCookie) {
-        this.$q.dialog({
-          title: 'Confirm',
-          message: `Do you want log in by token ${authCookie}.`,
-          ok: true,
-          cancel: true
-        }).then(() => {
-          this.tokenModel = authCookie
-          this.logIn()
-        })
-          .catch(() => {})
       } else { this.getTokenListen() }
     },
     getTokenListen () {
@@ -254,6 +241,24 @@ export default {
           }
         }
         window.addEventListener('message', tokenHandler)
+      }
+    },
+    openWindow (url, title) {
+      title = title || 'auth'
+      let w = 500, h = 600
+      let dualScreenLeft = window.screenLeft !== undefined ? window.screenLeft : screen.left
+      let dualScreenTop = window.screenTop !== undefined ? window.screenTop : screen.top
+
+      let width = window.innerWidth ? window.innerWidth : document.documentElement.clientWidth ? document.documentElement.clientWidth : screen.width
+      let height = window.innerHeight ? window.innerHeight : document.documentElement.clientHeight ? document.documentElement.clientHeight : screen.height
+
+      let left = ((width / 2) - (w / 2)) + dualScreenLeft
+      let top = ((height / 2) - (h / 2)) + dualScreenTop
+      let newWindow = window.open(url, title, 'toolbar=no,location=no,status=yes,resizable=yes,scrollbars=yes, width=' + w + ', height=' + h + ', top=' + top + ', left=' + left)
+
+      // Puts focus on the newWindow
+      if (window.focus) {
+        newWindow.focus()
       }
     }
   },

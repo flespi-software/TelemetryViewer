@@ -80,7 +80,7 @@ module.exports = function (ctx) {
       ],
       plugins: [
         'Loading',
-        'Cookies',
+        'SessionStorage',
         'LocalStorage',
         'Dialog',
         'Notify'
