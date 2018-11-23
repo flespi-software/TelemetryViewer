@@ -14,7 +14,7 @@
 importScripts("https://storage.googleapis.com/workbox-cdn/releases/3.4.1/workbox-sw.js");
 
 importScripts(
-  "precache-manifest.ac2f3c29af8b42cc63e96078abf96085.js"
+  "precache-manifest.c7554dd908ff8278d2646822efd7ca88.js"
 );
 
 workbox.core.setCacheNameDetails({prefix: "telemetry-viewer"});
