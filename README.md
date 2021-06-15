@@ -1,4 +1,4 @@
-# Telemetry Viewer
+# Telemetry Viewer (Deprecated)
 
 > A simple application based on flespi.io and built with Quasar and [QTelemetry component](https://github.com/flespi-software/QTelemetry). That displays devices telemetry.
 
